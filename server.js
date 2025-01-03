@@ -45,8 +45,11 @@ onConnect(socket);
 
 
     if (data.type === 'chat') {
-
-      console.log('Received message:', data.message ,"---",data.UID);
+      for (const UID in connections) {
+        if (UID !== data.UID) {
+          connections[UID].socket.send(JSON.stringify({ type: 'chat', message: data.message ,pName:data.pName }));
+        }
+      }
     }
 
 
@@ -54,8 +57,12 @@ onConnect(socket);
 
   socket.on('close', () => {
     console.log('A player disconnected.');
-
-
+    for (const UID in connections) {
+      if (connections[UID].socket === socket) {
+        delete connections[UID];
+        break;
+      }
+    }
   });
 });
 

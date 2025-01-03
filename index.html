@@ -54,7 +54,7 @@
   <script>
     const socket = new WebSocket('127.0.0.1:8080');
 
-    const UID="";
+    let user_UID="";
 
 
 
@@ -63,7 +63,8 @@
 
       switch (data.type) {
         case 'UID':
-          console.log(data);
+          user_UID=data.UID;
+          
           break;
 
         case 'chat':
@@ -89,7 +90,7 @@
     sendMessageButton.addEventListener('click', () => {
       const message = messageInput.value.trim();
       if (message) {
-        socket.send(JSON.stringify({ type: 'chat', message,UID ,pName: document.getElementById('pName').value ? document.getElementById('pName').value : "?" }));
+        socket.send(JSON.stringify({ type: 'chat', message,UID:user_UID ,pName: document.getElementById('pName').value ? document.getElementById('pName').value : "?" }));
         addChatMessage(message, 'You');
         messageInput.value = '';
       }
